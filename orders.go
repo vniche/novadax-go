@@ -3,6 +3,7 @@ package novadax
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 // Order stands for the order data returned by NOVADAX API
@@ -60,7 +61,14 @@ func (client *Client) ListOrders(filters *ListOrdersFilters) ([]*Order, error) {
 	var listOrdersResponse ListOrdersResponse
 	resp, err := client.do(req, &listOrdersResponse)
 	if err != nil {
-		return nil, fmt.Errorf("request failed with status %s: %s", resp.Status, err.Error())
+		return nil, fmt.Errorf("request failed: %s", err.Error())
 	}
+
+	// test for response status code
+	status, err := strconv.Atoi(resp.Status)
+	if err != nil || status < 200 || status > 299 {
+		return nil, fmt.Errorf("request failed with status %s", resp.Status)
+	}
+
 	return listOrdersResponse.Orders, err
 }

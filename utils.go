@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -37,10 +36,6 @@ func (client *Client) buildRequest(method, path string, body interface{}, secure
 	// parses request path
 	splittedPath := strings.Split(path, "?")
 	apiPath := splittedPath[0]
-	params, err := url.ParseQuery(splittedPath[1])
-	if err != nil {
-		log.Fatalf("%s", err.Error())
-	}
 
 	// assembles request info
 	rel := &url.URL{Path: apiPath}
@@ -61,6 +56,14 @@ func (client *Client) buildRequest(method, path string, body interface{}, secure
 
 	now := strconv.FormatInt(time.Now().Unix()*1000, 10)
 	if method == "GET" {
+		var params url.Values
+		if len(splittedPath) > 1 {
+			params, err = url.ParseQuery(splittedPath[1])
+			if err != nil {
+				return nil, err
+			}
+		}
+
 		if params.Encode() != "" {
 			req.URL.RawQuery = params.Encode()
 		}
@@ -71,8 +74,6 @@ func (client *Client) buildRequest(method, path string, body interface{}, secure
 		}
 	}
 
-	log.Printf("%+v", req)
-
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
 	}
@@ -81,24 +82,19 @@ func (client *Client) buildRequest(method, path string, body interface{}, secure
 	return req, nil
 }
 
-func (c *Client) do(req *http.Request, body interface{}) (*http.Response, error) {
-	resp, err := c.httpClient.Do(req)
+func (client *Client) do(req *http.Request, body interface{}) (*http.Response, error) {
+	resp, err := client.httpClient.Do(req)
 	if err != nil {
-		log.Printf("error request: %s", err.Error())
 		return nil, err
 	}
 	defer resp.Body.Close()
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Printf("error read bytes: %s", err.Error())
 		return nil, err
 	}
 
 	err = json.Unmarshal(bodyBytes, body)
-	if err != nil {
-		log.Printf("error unmarshal: %s", err.Error())
-	}
 	return resp, err
 }
 
