@@ -1,4 +1,4 @@
-package client
+package novadax
 
 import (
 	"errors"

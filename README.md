@@ -5,7 +5,7 @@ novadax-go is a Go client library for accessing the [NovaDAX API v1](https://doc
 ## Usage ##
 
 ```go
-import "github.com/artemis-tech/novadax-go/client"
+import "github.com/artemis-tech/novadax-go"
 ```
 
 Construct a new GitHub client, then use the various services on the client to
@@ -15,7 +15,7 @@ access different parts of the GitHub API. For example:
 // LISTING SYMBOLS (PUBLIC ENDPOINT)
 
 import (
-    novadax "github.com/artemis-tech/novadax-go/client"
+    novadax "github.com/artemis-tech/novadax-go"
 )
 
 client := novadax.Default()
@@ -28,7 +28,7 @@ symbols, err := client.ListSymbols()
 // LISTING ORDERS (PRIVATE ENDPOINT, THUS REQUIRE ACCESS AND SECRET KEYS)
 
 import (
-    novadax "github.com/artemis-tech/novadax-go/client"
+    novadax "github.com/artemis-tech/novadax-go"
 )
 
 /*

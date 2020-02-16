@@ -1,4 +1,4 @@
-package client
+package novadax
 
 // Symbol stands for NOVADAX's available symbol
 type Symbol struct {
