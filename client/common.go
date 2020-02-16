@@ -20,7 +20,7 @@ type ListSymbolsResponse struct {
 
 // ListSymbols returns current available symbols for NOVADAX
 func (client *Client) ListSymbols() ([]*Symbol, error) {
-	req, err := client.signRequest("GET", "/v1/common/symbols", nil, false)
+	req, err := client.buildRequest("GET", "/v1/common/symbols", nil, false)
 	if err != nil {
 		return nil, err
 	}

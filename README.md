@@ -12,14 +12,36 @@ Construct a new GitHub client, then use the various services on the client to
 access different parts of the GitHub API. For example:
 
 ```go
+// LISTING SYMBOLS (PUBLIC ENDPOINT)
+
 import (
     novadax "github.com/artemis-tech/novadax-go/client"
 )
 
-client := novadax.NewClient()
+client := novadax.Default()
 
 // list all symbols available at NOVADAX
 symbols, err := client.ListSymbols()
+```
+
+```go
+// LISTING ORDERS (PRIVATE ENDPOINT, THUS REQUIRE ACCESS AND SECRET KEYS)
+
+import (
+    novadax "github.com/artemis-tech/novadax-go/client"
+)
+
+/*
+* This configuration is also possible via environment variables, eg.:
+* NOVADAX_ACCESS_KEY="5388359-538583-5i9593-3596e0-6ca252484934aa4"
+* NOVADAX_SECRET_KEY="nl3KVXiOp4JN74482h4nkahiu5jDKWkKhnMumMy"
+*/
+
+// novadax.New("ACCESS_KEY", "PRIVATE_KEY")
+client := novadax.New("5388359-538583-5i9593-3596e0-6ca252484934aa4", "nl3KVXiOp4JN74482h4nkahiu5jDKWkKhnMumMy") // fake credentials here, just maintained a similar pattern to the actual data
+
+// list all symbols available at NOVADAX
+symbols, err := client.ListOreders()
 ```
 
 ### Rate Limiting ###
