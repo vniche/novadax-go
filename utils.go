@@ -98,8 +98,8 @@ func (client *Client) do(req *http.Request, body interface{}) (*http.Response, e
 	return resp, err
 }
 
-// StructToURLValues transforms a go struct into a url.Values for API requests
-func StructToURLValues(any interface{}) (values url.Values) {
+// structToURLValues transforms a go struct into a url.Values for API requests
+func structToURLValues(any interface{}) (values url.Values) {
 	values = url.Values{}
 	fieldValue := reflect.ValueOf(any).Elem()
 	fieldType := fieldValue.Type()

@@ -46,7 +46,7 @@ func (client *Client) ListOrders(filters *ListOrdersFilters) ([]*Order, error) {
 		return nil, errors.New("Symbol filter is required")
 	}
 
-	params := StructToURLValues(filters)
+	params := structToURLValues(filters)
 
 	path := "/v1/orders/list"
 	if params.Encode() != "" {
