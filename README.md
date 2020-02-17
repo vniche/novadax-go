@@ -1,5 +1,7 @@
 # novadax-go #
 
+[![GoDoc](https://img.shields.io/static/v1?label=godoc&message=reference&color=blue)](https://pkg.go.dev/github.com/artemis-tech/novadax-go?tab=doc)
+
 novadax-go is a Go client library for accessing the [NovaDAX API v1](https://doc.novadax.com/).
 
 ## Usage ##
