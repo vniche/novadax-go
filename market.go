@@ -1,6 +1,6 @@
 package novadax
 
-// MarketTicker stands for the NOVADAX API market ticker resource
+// MarketTicker stands for the NovaDAX API market ticker resource
 type MarketTicker struct {
 	Ask string `json:"ask"`
 	BaseVolume24h string `json:"baseVolume24h"`
@@ -21,7 +21,7 @@ type GetLatestMarketTickersResponse struct {
 	Message string `json:"message"`
 }
 
-// GetLatestTickers returns latest market tickers for all key pairs in NOVADAX
+// GetLatestTickers returns latest market tickers for all key pairs in NovaDAX
 func (client *Client) GetLatestTickers() ([]*MarketTicker, error) {
 	req, err := client.buildRequest("GET", "/v1/market/tickers", nil, false)
 	if err != nil {

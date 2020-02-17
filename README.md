@@ -10,8 +10,8 @@ novadax-go is a Go client library for accessing the [NovaDAX API v1](https://doc
 import "github.com/artemis-tech/novadax-go"
 ```
 
-Construct a new GitHub client, then use the various services on the client to
-access different parts of the GitHub API. For example:
+Construct a new NovaDAX client, then use the various services on the client to
+access different parts of the NovaDAX API. For example:
 
 ```go
 // LISTING SYMBOLS (PUBLIC ENDPOINT)
@@ -22,7 +22,7 @@ import (
 
 client := novadax.Default()
 
-// list all symbols available at NOVADAX
+// list all symbols available at NovaDAX
 symbols, err := client.ListSymbols()
 ```
 
@@ -42,7 +42,7 @@ import (
 // novadax.New("ACCESS_KEY", "PRIVATE_KEY")
 client := novadax.New("5388359-538583-5i9593-3596e0-6ca252484934aa4", "nl3KVXiOp4JN74482h4nkahiu5jDKWkKhnMumMy") // fake credentials here, just maintained a similar pattern to the actual data
 
-// list all symbols available at NOVADAX
+// list all symbols available at NovaDAX
 symbols, err := client.ListOreders()
 ```
 

@@ -1,6 +1,6 @@
 package novadax
 
-// Symbol stands for NOVADAX's available symbol
+// Symbol stands for NovaDAX's available symbol
 type Symbol struct {
 	Symbol          string `json:"symbol"`
 	BaseCurrency    string `json:"baseCurrency"`
@@ -18,7 +18,7 @@ type ListSymbolsResponse struct {
 	Symbols []*Symbol `json:"data"`
 }
 
-// ListSymbols returns current available symbols for NOVADAX
+// ListSymbols returns current available symbols for NovaDAX
 func (client *Client) ListSymbols() ([]*Symbol, error) {
 	req, err := client.buildRequest("GET", "/v1/common/symbols", nil, false)
 	if err != nil {

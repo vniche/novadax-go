@@ -7,13 +7,13 @@ import (
 	"os"
 )
 
-// Config stands for the NOVADAX API config
+// Config stands for the NovaDAX API config
 type Config struct {
 	AccessKey  string
 	PrivateKey string
 }
 
-// Client stands for the NOVADAX API HTTP client
+// Client stands for the NovaDAX API HTTP client
 type Client struct {
 	Config    *Config
 	BaseURL   *url.URL
@@ -24,7 +24,7 @@ type Client struct {
 
 var novadaxURL = "https://api.novadax.com"
 
-// Default returns a new default instance of NOVADAX API http client
+// Default returns a new default instance of NovaDAX API http client
 func Default() *Client {
 	if os.Getenv("NOVADAX_API_URL") != "" {
 		novadaxURL = os.Getenv("NOVADAX_API_URL")
@@ -45,7 +45,7 @@ func Default() *Client {
 	}
 }
 
-// New returns a new instance of NOVADAX API http client
+// New returns a new instance of NovaDAX API http client
 func New(accessKey string, privateKey string) *Client {
 	client := Default()
 

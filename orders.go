@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-// Order stands for the order data returned by NOVADAX API
+// Order stands for the order data returned by NovaDAX API
 type Order struct {
 	ID           string  `json:"id"`
 	Symbol       string  `json:"symbol"`
@@ -23,7 +23,7 @@ type Order struct {
 	Timestamp    int64   `json:"timestamp"`
 }
 
-// ListOrdersResponse returns current orders in NOVADAX
+// ListOrdersResponse returns current orders in NovaDAX
 type ListOrdersResponse struct {
 	Code   string   `json:"code"`
 	Orders []*Order `json:"data"`
