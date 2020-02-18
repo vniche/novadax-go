@@ -5,14 +5,24 @@ import (
 	"fmt"
 )
 
-// Order stands for the order data to be send to NovaDAX API
+// MarketBuyOrder stands for the market buy order to be sent to NovaDAX
+type MarketBuyOrder struct {
+	Symbol    string `json:"symbol"`
+	Type      string `json:"type"`
+	Side      string `json:"side"`
+	Price     string `json:"price,omitempty"`
+	AccountID string `json:"accountId,omitempty"`
+	Value     string `json:"value"`
+}
+
+// Order stands for the common order to be sent to NovaDAX
 type Order struct {
 	Symbol    string `json:"symbol"`
 	Type      string `json:"type"`
 	Side      string `json:"side"`
 	Price     string `json:"price,omitempty"`
-	Amount    string `json:"amount"`
 	AccountID string `json:"accountId,omitempty"`
+	Amount    string `json:"amount"`
 }
 
 // OrderDetails stands for the order data returned by NovaDAX API
@@ -121,7 +131,27 @@ func (client *Client) CreateOrder(order *Order) (*OrderDetails, error) {
 	}
 
 	if order.Type == "LIMIT" && order.Price == "" {
-		return nil, errors.New("Price is required for limit orders")
+		return nil, errors.New("Price is required for LIMIT orders")
+	}
+
+	req, err := client.buildRequest("POST", "/v1/orders/create", order, true)
+	if err != nil {
+		return nil, err
+	}
+
+	var orderDetailsResponse OrderDetailsResponse
+	_, err = client.do(req, &orderDetailsResponse)
+	if err != nil {
+		return nil, fmt.Errorf("request failed: %s", err.Error())
+	}
+
+	return orderDetailsResponse.OrderDetails, err
+}
+
+// CreateMarketBuyOrder creates a new market buy order and return it's details
+func (client *Client) CreateMarketBuyOrder(order *MarketBuyOrder) (*OrderDetails, error) {
+	if order.Symbol == "" || order.Type == "" || order.Value == "" || order.Side == "" {
+		return nil, errors.New("Missing required fields")
 	}
 
 	req, err := client.buildRequest("POST", "/v1/orders/create", order, true)

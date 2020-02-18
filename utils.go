@@ -9,7 +9,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -83,8 +82,6 @@ func (client *Client) buildRequest(method, path string, body interface{}, secure
 
 			jsonString := string(bodyJSON)
 
-			log.Printf("%s", jsonString)
-
 			hash := MD5Digest(&jsonString)
 			client.signRequest(req, method, apiPath, hash, now)
 		}
@@ -94,7 +91,7 @@ func (client *Client) buildRequest(method, path string, body interface{}, secure
 		req.Header.Set("Content-Type", "application/json")
 	}
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", client.UserAgent)
+
 	return req, nil
 }
 

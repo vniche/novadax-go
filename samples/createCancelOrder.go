@@ -12,7 +12,7 @@ func main() {
 	client := novadax.Default()
 
 	buyOrder, err := client.CreateOrder(&novadax.Order{
-		Amount: fmt.Sprintf("%f", 0.001), // target currencty amount to buy
+		Amount: fmt.Sprintf("%f", 0.001), // target currency amount to buy
 		Type:   "LIMIT",
 		Side:   "BUY",
 		Price:  fmt.Sprintf("%f", 9500.00),
