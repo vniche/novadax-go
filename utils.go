@@ -3,11 +3,13 @@ package novadax
 import (
 	"bytes"
 	"crypto/hmac"
+	"crypto/md5"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"io"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -16,13 +18,13 @@ import (
 	"time"
 )
 
-func (client *Client) signRequest(req *http.Request, method string, path string, encodedParams string, now string) {
+func (client *Client) signRequest(req *http.Request, method string, path string, encodedData string, now string) {
 
 	// initializes hmac+sha256 hash with configured private key
 	hash := hmac.New(sha256.New, []byte(client.Config.PrivateKey))
 
 	// writes signature to hmac+sha256 hash
-	hash.Write([]byte(method + "\\n" + path + "\\n" + encodedParams + "\\n" + now))
+	hash.Write([]byte(method + "\\n" + path + "\\n" + encodedData + "\\n" + now))
 
 	// encodes hash to hex
 	signedHash := hex.EncodeToString(hash.Sum(nil))
@@ -40,16 +42,16 @@ func (client *Client) buildRequest(method, path string, body interface{}, secure
 	// assembles request info
 	rel := &url.URL{Path: apiPath}
 	apiURL := client.BaseURL.ResolveReference(rel)
-	var buf io.ReadWriter
+	var jsonBytes []byte
+	var err error
 	if body != nil {
-		buf = new(bytes.Buffer)
-		err := json.NewEncoder(buf).Encode(body)
+		jsonBytes, err = json.Marshal(body)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	req, err := http.NewRequest(method, apiURL.String(), buf)
+	req, err := http.NewRequest(method, apiURL.String(), bytes.NewBuffer(jsonBytes))
 	if err != nil {
 		return nil, err
 	}
@@ -72,6 +74,20 @@ func (client *Client) buildRequest(method, path string, body interface{}, secure
 		if secure {
 			client.signRequest(req, method, apiPath, params.Encode(), now)
 		}
+	} else {
+		if body != nil && secure {
+			bodyJSON, err := json.Marshal(body)
+			if err != nil {
+				return nil, err
+			}
+
+			jsonString := string(bodyJSON)
+
+			log.Printf("%s", jsonString)
+
+			hash := MD5Digest(&jsonString)
+			client.signRequest(req, method, apiPath, hash, now)
+		}
 	}
 
 	if body != nil {
@@ -81,6 +97,9 @@ func (client *Client) buildRequest(method, path string, body interface{}, secure
 	req.Header.Set("User-Agent", client.UserAgent)
 	return req, nil
 }
+
+// StatusCode stands for the resp.Status code index
+const StatusCode = 0
 
 func (client *Client) do(req *http.Request, body interface{}) (*http.Response, error) {
 	resp, err := client.httpClient.Do(req)
@@ -92,6 +111,16 @@ func (client *Client) do(req *http.Request, body interface{}) (*http.Response, e
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
+	}
+
+	statusInfo := strings.Split(resp.Status, " ")
+
+	// test for response status code
+	status, err := strconv.Atoi(statusInfo[StatusCode])
+	if err != nil {
+		return nil, err
+	} else if status < 200 || status > 299 {
+		return nil, fmt.Errorf("request failed with status %d", status)
 	}
 
 	err = json.Unmarshal(bodyBytes, body)
@@ -153,4 +182,9 @@ func structToURLValues(any interface{}) (values url.Values) {
 		}
 	}
 	return values
+}
+
+// MD5Digest returns a string digested MD5 hash
+func MD5Digest(s *string) string {
+	return fmt.Sprintf("%x", md5.Sum([]byte(*s)))
 }

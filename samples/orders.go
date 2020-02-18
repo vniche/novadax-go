@@ -17,10 +17,7 @@ func main() {
 	 */
 	client := novadax.Default()
 
-	orders, err := client.ListOrders(&novadax.ListOrdersFilters{
-		Symbol: "BTC_BRL",
-		Limit:  10,
-	})
+	orders, err := client.ListOrders(&novadax.ListOrdersFilters{})
 	if err != nil {
 		log.Printf("%s", err.Error())
 		return

@@ -9,7 +9,7 @@ import (
 func main() {
 	client := novadax.Default()
 
-	tickers, err := client.GetLatestTickers()
+	tickers, err := client.GetLatestTickers(&novadax.GetLatestTickersFilters{})
 	if err != nil {
 		log.Printf("%s", err.Error())
 	}
