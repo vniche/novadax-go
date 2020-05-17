@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	novadax "github.com/artemis-tech/novadax-go"
+	novadax "github.com/vniche/novadax-go"
 )
 
 func main() {

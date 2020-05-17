@@ -1,13 +1,13 @@
 # novadax-go #
 
-[![GoDoc](https://img.shields.io/static/v1?label=godoc&message=reference&color=blue)](https://pkg.go.dev/github.com/artemis-tech/novadax-go?tab=doc)
+[![GoDoc](https://img.shields.io/static/v1?label=godoc&message=reference&color=blue)](https://pkg.go.dev/github.com/vniche/novadax-go?tab=doc)
 
 novadax-go is a Go client library for accessing the [NovaDAX API v1](https://doc.novadax.com/).
 
 ## Usage ##
 
 ```go
-import "github.com/artemis-tech/novadax-go"
+import "github.com/vniche/novadax-go"
 ```
 
 Construct a new NovaDAX client, then use the various services on the client to
@@ -17,7 +17,7 @@ access different parts of the NovaDAX API. For example:
 // LISTING SYMBOLS (PUBLIC ENDPOINT)
 
 import (
-    novadax "github.com/artemis-tech/novadax-go"
+    novadax "github.com/vniche/novadax-go"
 )
 
 client := novadax.Default()
@@ -30,7 +30,7 @@ symbols, err := client.ListSymbols()
 // LISTING ORDERS (PRIVATE ENDPOINT, THUS REQUIRE ACCESS AND SECRET KEYS)
 
 import (
-    novadax "github.com/artemis-tech/novadax-go"
+    novadax "github.com/vniche/novadax-go"
 )
 
 /*

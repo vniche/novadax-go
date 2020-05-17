@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	novadax "github.com/artemis-tech/novadax-go"
+	novadax "github.com/vniche/novadax-go"
 )
 
 func main() {
