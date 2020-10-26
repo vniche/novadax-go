@@ -9,13 +9,10 @@ import (
 func main() {
 	client := novadax.Default()
 
-	tickers, err := client.GetLatestTickers(&novadax.GetMarketTickersFilters{})
+	ticker, err := client.GetMarketTicker(&novadax.GetMarketTickersFilters{})
 	if err != nil {
 		log.Printf("%s", err.Error())
 	}
 
-	log.Printf("%+v", tickers)
-	for _, ticker := range tickers {
-		log.Printf("%+v", ticker)
-	}
+	log.Printf("%+v", ticker)
 }

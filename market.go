@@ -21,13 +21,20 @@ type GetLatestMarketTickersResponse struct {
 	Message       string          `json:"message"`
 }
 
-// GetLatestMarketTickersFilters stands for the GetLatestTickers possible and required filters
-type GetLatestMarketTickersFilters struct {
+// GetMarketTickerResponse stands for the response structure for market ticker API endpoint
+type GetMarketTickerResponse struct {
+	Code         string        `json:"code"`
+	MarketTicker *MarketTicker `json:"data"`
+	Message      string        `json:"message"`
+}
+
+// GetMarketTickersFilters stands for the GetLatestTickers possible and required filters
+type GetMarketTickersFilters struct {
 	Symbol string `json:"symbol"`
 }
 
 // GetLatestTickers returns latest market tickers for all key pairs in NovaDAX
-func (client *Client) GetLatestTickers(filters *GetLatestMarketTickersFilters) ([]*MarketTicker, error) {
+func (client *Client) GetLatestTickers(filters *GetMarketTickersFilters) ([]*MarketTicker, error) {
 	params := structToURLValues(filters)
 
 	path := "/v1/market/tickers"
@@ -43,6 +50,25 @@ func (client *Client) GetLatestTickers(filters *GetLatestMarketTickersFilters) (
 	var response GetLatestMarketTickersResponse
 	_, err = client.do(req, &response)
 	return response.MarketTickers, err
+}
+
+// GetMarketTicker returns latest market tickers for a single key pairs in NovaDAX
+func (client *Client) GetMarketTicker(filters *GetMarketTickersFilters) (*MarketTicker, error) {
+	params := structToURLValues(filters)
+
+	path := "/v1/market/ticker"
+	if params.Encode() != "" {
+		path += "?" + params.Encode()
+	}
+
+	req, err := client.buildRequest("GET", path, nil, false)
+	if err != nil {
+		return nil, err
+	}
+
+	var response GetMarketTickerResponse
+	_, err = client.do(req, &response)
+	return response.MarketTicker, err
 }
 
 // MarketDepth stands for the NovaDAX API market depth resource
