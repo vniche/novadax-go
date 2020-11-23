@@ -34,13 +34,8 @@ type GetMarketTickersFilters struct {
 }
 
 // GetLatestTickers returns latest market tickers for all key pairs in NovaDAX
-func (client *Client) GetLatestTickers(filters *GetMarketTickersFilters) ([]*MarketTicker, error) {
-	params := structToURLValues(filters)
-
+func (client *Client) GetLatestTickers() ([]*MarketTicker, error) {
 	path := "/v1/market/tickers"
-	if params.Encode() != "" {
-		path += "?" + params.Encode()
-	}
 
 	req, err := client.buildRequest("GET", path, nil, false)
 	if err != nil {
